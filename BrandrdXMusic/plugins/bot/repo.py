@@ -1,7 +1,8 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from ANNIEMUSIC import app
-from config import BOT_USERNAME
+from BrandrdXMusic import app
+
+BOT_USERNAME = "RUHI_X_MUSIC"
 
 start_txt = """**
 ✪ 𝐊𝐇𝐔𝐃 𝐁𝐀𝐍𝐀 𝐁𝐇𝐎𝐒𝐃𝐈𝐊𝐄 ✪
