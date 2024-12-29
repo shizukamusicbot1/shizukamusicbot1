@@ -1,26 +1,25 @@
 from io import BytesIO
-
-from httpx import AsyncClient, Timeout
-from pyrogram import filters
+from pyrogram import Client, filters
 from pyrogram.types import Message
+from ANNIEMUSIC import app
+from httpx import AsyncClient, Timeout
 
-from BrandrdXMusic import app
-
+# -----------------------------------------------------------------
 fetch = AsyncClient(
     http2=True,
     verify=False,
     headers={
         "Accept-Language": "id-ID",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edge/107.0.1418.42",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
+                       AppleWebKit/537.36 (KHTML, like Gecko) \
+                       Chrome/107.0.0.0 Safari/537.36 Edge/107.0.1418.42",
     },
     timeout=Timeout(20),
 )
-
-
+# ------------------------------------------------------------------------
 class QuotlyException(Exception):
     pass
-
-
+# --------------------------------------------------------------------------
 async def get_message_sender_id(ctx: Message):
     if ctx.forward_date:
         if ctx.forward_sender_name:
@@ -37,8 +36,7 @@ async def get_message_sender_id(ctx: Message):
         return ctx.sender_chat.id
     else:
         return 1
-
-
+# -----------------------------------------------------------------------------------------
 async def get_message_sender_name(ctx: Message):
     if ctx.forward_date:
         if ctx.forward_sender_name:
@@ -49,7 +47,6 @@ async def get_message_sender_name(ctx: Message):
                 if ctx.forward_from.last_name
                 else ctx.forward_from.first_name
             )
-
         elif ctx.forward_from_chat:
             return ctx.forward_from_chat.title
         else:
@@ -63,8 +60,7 @@ async def get_message_sender_name(ctx: Message):
         return ctx.sender_chat.title
     else:
         return ""
-
-
+# ---------------------------------------------------------------------------------------------------
 async def get_custom_emoji(ctx: Message):
     if ctx.forward_date:
         return (
@@ -78,7 +74,7 @@ async def get_custom_emoji(ctx: Message):
 
     return ctx.from_user.emoji_status.custom_emoji_id if ctx.from_user else ""
 
-
+# ---------------------------------------------------------------------------------------------------
 async def get_message_sender_username(ctx: Message):
     if ctx.forward_date:
         if (
@@ -109,8 +105,7 @@ async def get_message_sender_username(ctx: Message):
         return ""
     else:
         return ctx.sender_chat.username
-
-
+# ------------------------------------------------------------------------
 async def get_message_sender_photo(ctx: Message):
     if ctx.forward_date:
         if (
@@ -144,7 +139,7 @@ async def get_message_sender_photo(ctx: Message):
                 if ctx.forward_from.photo
                 else ""
             )
-
+# ---------------------------------------------------------------------------------
     elif ctx.from_user and ctx.from_user.photo:
         return {
             "small_file_id": ctx.from_user.photo.small_file_id,
@@ -166,8 +161,7 @@ async def get_message_sender_photo(ctx: Message):
             "big_file_id": ctx.sender_chat.photo.big_file_id,
             "big_photo_unique_id": ctx.sender_chat.photo.big_photo_unique_id,
         }
-
-
+# ---------------------------------------------------------------------------------------------------
 async def get_text_or_caption(ctx: Message):
     if ctx.text:
         return ctx.text
@@ -175,8 +169,7 @@ async def get_text_or_caption(ctx: Message):
         return ctx.caption
     else:
         return ""
-
-
+# ---------------------------------------------------------------------------------------------------
 async def pyrogram_to_quotly(messages, is_reply):
     if not isinstance(messages, list):
         messages = [messages]
@@ -186,7 +179,7 @@ async def pyrogram_to_quotly(messages, is_reply):
         "backgroundColor": "#1b1429",
         "messages": [],
     }
-
+# ------------------------------------------------------------------------------------------------------------
     for message in messages:
         the_message_dict_to_append = {}
         if message.entities:
@@ -217,9 +210,9 @@ async def pyrogram_to_quotly(messages, is_reply):
         the_message_dict_to_append["from"]["name"] = await get_message_sender_name(
             message
         )
-        the_message_dict_to_append["from"]["username"] = (
-            await get_message_sender_username(message)
-        )
+        the_message_dict_to_append["from"][
+            "username"
+        ] = await get_message_sender_username(message)
         the_message_dict_to_append["from"]["type"] = message.chat.type.name.lower()
         the_message_dict_to_append["from"]["photo"] = await get_message_sender_photo(
             message
@@ -238,8 +231,9 @@ async def pyrogram_to_quotly(messages, is_reply):
         return r.read()
     else:
         raise QuotlyException(r.json())
+# ------------------------------------------------------------------------------------------
 
-
+# Helper function to check if an argument is an integer
 def isArgInt(txt) -> list:
     count = txt
     try:
@@ -248,77 +242,53 @@ def isArgInt(txt) -> list:
     except ValueError:
         return [False, 0]
 
-
-@app.on_message(filters.command(["q", "r"]) & filters.reply)
+# ---------------------------------------------------------------------------------------------------
+@app.on_message(filters.command("q") & filters.reply)
 async def msg_quotly_cmd(self: app, ctx: Message):
-    ww = await ctx.reply_text("ᴡᴀɪᴛ ᴀ sᴇᴄᴏɴᴅ......")
+    args = ctx.text.split()[1:]
+
     is_reply = False
-    if ctx.command[0].endswith("r"):
-        is_reply = True
-    if len(ctx.text.split()) > 1:
-        check_arg = isArgInt(ctx.command[1])
-        if check_arg[0]:
-            if check_arg[1] < 2 or check_arg[1] > 10:
-                await ww.delete()
-                return await ctx.reply_msg("Invalid range", del_in=6)
-            try:
-                messages = [
-                    i
-                    for i in await self.get_messages(
-                        chat_id=ctx.chat.id,
-                        message_ids=range(
-                            ctx.reply_to_message.id,
-                            ctx.reply_to_message.id + (check_arg[1] + 5),
-                        ),
-                        replies=-1,
-                    )
-                    if not i.empty and not i.media
-                ]
-            except Exception:
-                return await ctx.reply_text("🤷🏻‍♂️")
-            try:
-                make_quotly = await pyrogram_to_quotly(messages, is_reply=is_reply)
-                bio_sticker = BytesIO(make_quotly)
-                bio_sticker.name = "misskatyquote_sticker.webp"
-                await ww.delete()
-                return await ctx.reply_sticker(bio_sticker)
-            except Exception:
-                await ww.delete()
-                return await ctx.reply_msg("🤷🏻‍♂️")
+    count = 1
+
+    for arg in args:
+        if arg.lower() == 'r':
+            is_reply = True
+        else:
+            check_arg = isArgInt(arg)
+            if check_arg[0]:
+                count = check_arg[1]
+            else:
+                continue  # Ignore invalid arguments
+
+    if count < 1 or count > 10:
+        return await ctx.reply_text("Invalid range", delete_after=6)
+    
+    # Send processing message
+    processing_msg = await ctx.reply_text("❄️")
     try:
-        messages_one = await self.get_messages(
-            chat_id=ctx.chat.id, message_ids=ctx.reply_to_message.id, replies=-1
-        )
-        messages = [messages_one]
+        if count == 1:
+            messages = [ctx.reply_to_message]
+        else:
+            message_ids = range(ctx.reply_to_message.id, ctx.reply_to_message.id + count)
+            messages = [
+                i
+                for i in await self.get_messages(
+                    chat_id=ctx.chat.id,
+                    message_ids=message_ids,
+                    replies=-1,
+                )
+                if not i.empty and not i.media
+            ]
     except Exception:
-        await ww.delete()
-        return await ctx.reply_msg("🤷🏻‍♂️")
+        await processing_msg.delete()
+        return await ctx.reply_text("🤷🏻‍♂️")
     try:
         make_quotly = await pyrogram_to_quotly(messages, is_reply=is_reply)
         bio_sticker = BytesIO(make_quotly)
         bio_sticker.name = "misskatyquote_sticker.webp"
-        await ww.delete()
-        return await ctx.reply_sticker(bio_sticker)
+        await ctx.reply_sticker(bio_sticker)
     except Exception as e:
-        await ww.delete()
-        return await ctx.reply_msg(f"ERROR: {e}")
-
-
-__HELP__ = """
-**ǫᴜᴏᴛᴇ ɢᴇɴᴇʀᴀᴛɪᴏɴ ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs**
-
-ᴜsᴇ ᴛʜᴇsᴇ ᴄᴏᴍᴍᴀɴᴅs ᴛᴏ ᴄʀᴇᴀᴛᴇ ǫᴜᴏᴛᴇs ғʀᴏᴍ ᴍᴇssᴀɢᴇs:
-
-- `/q`: ᴄʀᴇᴀᴛᴇ ᴀ ǫᴜᴏᴛᴇ ғʀᴏᴍ ᴀ sɪɴɢʟᴇ ᴍᴇssᴀɢᴇ.
-- `/r`: ᴄʀᴇᴀᴛᴇ ᴀ ǫᴜᴏᴛᴇ ғʀᴏᴍ ᴀ sɪɴɢʟᴇ ᴍᴇssᴀɢᴇ ᴀɴᴅ ɪᴛs ʀᴇᴘʟɪᴇᴅ ᴍᴇssᴀɢᴇ.
-
-**ᴇxᴀᴍᴘʟᴇs:**
-- `/q `: ᴄʀᴇᴀᴛᴇ ᴀ ǫᴜᴏᴛᴇ ғʀᴏᴍ ʀᴇᴘʟɪᴇᴅ ᴍᴇssᴀɢᴇs.
-
-- `/r `: ᴄʀᴇᴀᴛᴇ ᴀ ǫᴜᴏᴛᴇ ғʀᴏᴍ ʀᴇᴘʟɪᴇᴅ ᴍᴇssᴀɢᴇs.
-
-**ɴᴏᴛᴇ:**
-ᴍᴀᴋᴇ sᴜʀᴇ ᴛᴏ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ғᴏʀ ᴛʜᴇ ǫᴜᴏᴛᴇ ᴄᴏᴍᴍᴀɴᴅ ᴛᴏ ᴡᴏʀᴋ.
-"""
-
-__MODULE__ = "Qᴜᴏᴛᴇ"
+        await ctx.reply_text(f"ERROR: {e}")
+    finally:
+        await processing_msg.delete()
+# ---------------------------------------------------------------------------------
