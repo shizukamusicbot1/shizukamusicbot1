@@ -68,7 +68,7 @@ def stream_markup_timer(_, vidid, chat_id, played, dur):
         ],
         [
             InlineKeyboardButton(
-                text="⛦ ᴏᴡɴᴇʀ ❥", url=config.SUPPORT_CHAT
+                text="⛦ ᴏᴡɴᴇʀ ❥", user_id=config.OWNER_ID
             ),
             InlineKeyboardButton(
                 text="⛦ ᴄʜᴀᴛ ❥", url=config.SUPPORT_CHAT
@@ -90,7 +90,7 @@ def stream_markup(_, videoid, chat_id):
         ],
         [
             InlineKeyboardButton(
-                text="⛦ ᴏᴡɴᴇʀ ❥", url=config.SUPPORT_CHAT
+                text="⛦ ᴏᴡɴᴇʀ ❥", user_id=config.OWNER_ID
             ),
             InlineKeyboardButton(
                 text="⛦ ᴄʜᴀᴛ ❥", url=config.SUPPORT_CHAT
@@ -245,7 +245,7 @@ def stream_markup2(_, chat_id):
         ],
 [
             InlineKeyboardButton(
-                text="⛦ ᴏᴡɴᴇʀ ❥", url=config.SUPPORT_CHAT
+                text="⛦ ᴏᴡɴᴇʀ ❥", user_id=config.OWNER_ID
             ),
             InlineKeyboardButton(
                 text="⛦ ᴄʜᴀᴛ ❥", url=config.SUPPORT_CHAT
