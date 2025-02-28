@@ -526,7 +526,7 @@ async def Anonymous_check(client, CallbackQuery):
         pass
 
 
-@app.on_callback_query(filters.regex("JARVISPlaylists") & ~BANNED_USERS)
+@app.on_callback_query(filters.regex("Playlists") & ~BANNED_USERS)
 @languageCB
 async def play_playlists_command(client, CallbackQuery, _):
     callback_data = CallbackQuery.data.strip()
