@@ -1,13 +1,12 @@
+
 import random
 import string
-
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InputMediaPhoto, Message
 from pytgcalls.exceptions import NoActiveGroupCall
-
 import config
 from BrandrdXMusic import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
-from BrandrdXMusic.core.call import Hotty
+from BrandrdXMusic.core.call import JARVIS
 from BrandrdXMusic.utils import seconds_to_min, time_to_seconds
 from BrandrdXMusic.utils.channelplay import get_channeplayCB
 from BrandrdXMusic.utils.decorators.language import languageCB
@@ -22,22 +21,12 @@ from BrandrdXMusic.utils.inline import (
 )
 from BrandrdXMusic.utils.logger import play_logs
 from BrandrdXMusic.utils.stream.stream import stream
-from config import BANNED_USERS, lyrical
+from config import BANNED_USERS, lyrical, AYU
 
 
 @app.on_message(
-    filters.command(
-        [
-            "play",
-            "vplay",
-            "cplay",
-            "cvplay",
-            "playforce",
-            "vplayforce",
-            "cplayforce",
-            "cvplayforce",
-        ]
-    )
+   filters.command(["play", "vplay", "cplay", "cvplay", "playforce", "vplayforce", "cplayforce", "cvplayforce"] ,prefixes=["/", "!"])
+            
     & filters.group
     & ~BANNED_USERS
 )
@@ -54,7 +43,7 @@ async def play_commnd(
     fplay,
 ):
     mystic = await message.reply_text(
-        _["play_2"].format(channel) if channel else _["play_1"]
+        _["play_2"].format(channel) if channel else random.choice(AYU)
     )
     plist_id = None
     slider = None
@@ -67,6 +56,7 @@ async def play_commnd(
         if message.reply_to_message
         else None
     )
+
     video_telegram = (
         (message.reply_to_message.video or message.reply_to_message.document)
         if message.reply_to_message
@@ -163,7 +153,8 @@ async def play_commnd(
                         config.PLAYLIST_FETCH_LIMIT,
                         message.from_user.id,
                     )
-                except:
+                except Exception as e:
+                    print(e)
                     return await mystic.edit_text(_["play_3"])
                 streamtype = "playlist"
                 plist_type = "yt"
@@ -172,7 +163,30 @@ async def play_commnd(
                 else:
                     plist_id = url.split("=")[1]
                 img = config.PLAYLIST_IMG_URL
-                cap = _["play_9"]
+                cap = _["play_10"]
+            elif "https://youtu.be" in url:
+                videoid = url.split("/")[-1].split("?")[0]
+                details, track_id = await YouTube.track(f"https://www.youtube.com/watch?v={videoid}")
+                streamtype = "youtube"
+                img = details["thumb"]
+                cap = _["play_11"].format(
+                    details["title"],
+                    details["duration_min"],
+                )
+            elif "youtube.com/@" in url:
+                try:
+                    video_urls = fetch_channel_videos(url)
+                    for video_url in video_urls:
+                        details, track_id = await YouTube.track(video_url)
+                        streamtype = "playlist"
+                        img = details["thumb"]
+                        cap = _["play_10"].format(details["title"], details["duration_min"])
+                        await queue_video_for_playback(video_url, details, track_id, streamtype, img, cap)
+
+                    await mystic.edit_text("All videos from the channel have been added to the queue.")
+                except Exception as e:
+                    print(e) 
+                    await mystic.edit_text(_["play_3"])
             else:
                 try:
                     details, track_id = await YouTube.track(url)
@@ -454,7 +468,7 @@ async def play_music(client, CallbackQuery, _):
     except:
         pass
     mystic = await CallbackQuery.message.reply_text(
-        _["play_2"].format(channel) if channel else _["play_1"]
+        _["play_2"].format(channel) if channel else random.choice(AYU)
     )
     try:
         details, track_id = await YouTube.track(vidid, True)
@@ -502,7 +516,7 @@ async def play_music(client, CallbackQuery, _):
 
 
 @app.on_callback_query(filters.regex("AnonymousAdmin") & ~BANNED_USERS)
-async def piyush_check(client, CallbackQuery):
+async def Anonymous_check(client, CallbackQuery):
     try:
         await CallbackQuery.answer(
             "» ʀᴇᴠᴇʀᴛ ʙᴀᴄᴋ ᴛᴏ ᴜsᴇʀ ᴀᴄᴄᴏᴜɴᴛ :\n\nᴏᴘᴇɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ sᴇᴛᴛɪɴɢs.\n-> ᴀᴅᴍɪɴɪsᴛʀᴀᴛᴏʀs\n-> ᴄʟɪᴄᴋ ᴏɴ ʏᴏᴜʀ ɴᴀᴍᴇ\n-> ᴜɴᴄʜᴇᴄᴋ ᴀɴᴏɴʏᴍᴏᴜs ᴀᴅᴍɪɴ ᴘᴇʀᴍɪssɪᴏɴs.",
@@ -512,7 +526,7 @@ async def piyush_check(client, CallbackQuery):
         pass
 
 
-@app.on_callback_query(filters.regex("HottyPlaylists") & ~BANNED_USERS)
+@app.on_callback_query(filters.regex("JARVISPlaylists") & ~BANNED_USERS)
 @languageCB
 async def play_playlists_command(client, CallbackQuery, _):
     callback_data = CallbackQuery.data.strip()
@@ -541,7 +555,7 @@ async def play_playlists_command(client, CallbackQuery, _):
     except:
         pass
     mystic = await CallbackQuery.message.reply_text(
-        _["play_2"].format(channel) if channel else _["play_1"]
+        _["play_2"].format(channel) if channel else random.choice(AYU)
     )
     videoid = lyrical.get(videoid)
     video = True if mode == "v" else None
@@ -660,4 +674,4 @@ async def slider_queries(client, CallbackQuery, _):
         )
         return await CallbackQuery.edit_message_media(
             media=med, reply_markup=InlineKeyboardMarkup(buttons)
-)
+        )
