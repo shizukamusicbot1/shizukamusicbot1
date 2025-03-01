@@ -552,6 +552,7 @@ async def play_playlists_command(client, CallbackQuery, _):
         try:
             result = await YouTube.playlist(
                 videoid,
+                config.PLAYLIST_FETCH_LIMIT,
                 CallbackQuery.from_user.id,
                 True,
             )
