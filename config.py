@@ -86,7 +86,7 @@ lyrical = {}
 votemode = {}
 autoclean = []
 confirmer = {}
-AYU = []
+
 
 
 START_IMG_URL = getenv(
