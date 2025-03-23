@@ -26,7 +26,7 @@ async def start(_, msg):
              ],
      
              [
-             InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ", url="https://t.me/thesecretclubhouse"),
+             InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ", url="https://t.me/+KlbXA4vCNlwyMjA1"),
              ],
      
               ]
