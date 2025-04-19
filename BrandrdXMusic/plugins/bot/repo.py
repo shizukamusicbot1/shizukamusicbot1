@@ -5,7 +5,7 @@ from BrandrdXMusic import app
 BOT_USERNAME = "heer_chatbot"
 
 start_txt = """**
-✪ 𝐊𝐇𝐔𝐃 𝐁𝐀𝐍𝐀 𝐁𝐇𝐎𝐒𝐃𝐈𝐊𝐄 ✪
+✪ 𝐉𝐀𝐊𝐄 ➻❥⏤͟͟͞͞𝐏𝐑𝐎𝐅𝐄𝐒𝐒𝐎𝐑💸⎯ꨄ 𝐊𝐎 𝐏𝐀𝐏𝐀 𝐁𝐎𝐋 ✪
  
 **"""
 
@@ -21,12 +21,12 @@ async def start(_, msg):
             ],
      
             [
-             InlineKeyboardButton("ᴏᴡɴᴇʀ", url="https://t.me/ll_Chalcogen_ll"),
-             InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/ll_lafz_ll"),
+             InlineKeyboardButton("𝐉𝐀𝐊𝐄 ➻❥⏤͟͟͞͞𝐏𝐑𝐎𝐅𝐄𝐒𝐒𝐎𝐑💸⎯ꨄ 𝐊𝐎 𝐏𝐀𝐏𝐀 𝐁𝐎𝐋", url="https://t.me/TG_PROFESS0R"),
+             InlineKeyboardButton("𝐉𝐀𝐊𝐄 ➻❥⏤͟͟͞͞𝐏𝐑𝐎𝐅𝐄𝐒𝐒𝐎𝐑💸⎯ꨄ 𝐊𝐎 𝐏𝐀𝐏𝐀 𝐁𝐎𝐋", url="https://t.me/TG_PROFESS0R"),
              ],
      
              [
-             InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ", url="https://t.me/+KlbXA4vCNlwyMjA1"),
+             InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ", url="https://t.me/MUSIC_BOT_UPDATE"),
              ],
      
               ]
