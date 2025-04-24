@@ -42,7 +42,7 @@ GIT_TOKEN = getenv(
     "GIT_TOKEN", None
 )  # Fill this variable if your upstream repository is private
 
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/MUSIC_BOT_UPDATE")
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/OG_FRAINDS")
 SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/MUSIC_BOT_UPDATE")
 
 # Set this to True if you want the assistant to automatically leave chats after an interval
@@ -90,21 +90,21 @@ confirmer = {}
 
 
 START_IMG_URL = getenv(
-    "START_IMG_URL", "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
+    "START_IMG_URL", "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
 )
 PING_IMG_URL = getenv(
-    "PING_IMG_URL", "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
+    "PING_IMG_URL", "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
 )
-PLAYLIST_IMG_URL = "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
-STATS_IMG_URL = "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
-TELEGRAM_AUDIO_URL = "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
-TELEGRAM_VIDEO_URL = "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
-STREAM_IMG_URL = "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
-SOUNCLOUD_IMG_URL = "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
-YOUTUBE_IMG_URL = "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
-SPOTIFY_ARTIST_IMG_URL = "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
-SPOTIFY_ALBUM_IMG_URL = "https://graph.org/file/87ea38a333067ee8dc767-0ceede3d5ce6ba5c21.jpg"
-SPOTIFY_PLAYLIST_IMG_URL = "https://graph.org/file/99a174d2e0978a494b36b-43fbcabd1dd300a07c.jpg"
+PLAYLIST_IMG_URL = "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
+STATS_IMG_URL = "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
+TELEGRAM_AUDIO_URL = "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
+TELEGRAM_VIDEO_URL = "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
+STREAM_IMG_URL = "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
+SOUNCLOUD_IMG_URL = "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
+YOUTUBE_IMG_URL = "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
+SPOTIFY_ARTIST_IMG_URL = "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
+SPOTIFY_ALBUM_IMG_URL = "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
+SPOTIFY_PLAYLIST_IMG_URL = "https://graph.org/file/d0128bff3f3d553105922-6cb9a0fbdc88e3c335.jpg"
 
 
 def time_to_seconds(time):
